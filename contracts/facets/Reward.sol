@@ -2,15 +2,12 @@
 pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import {LibDiamond} from "../libraries/LibDiamond.sol";
 
 import "../AppStorage.sol";
 import "../Errors.sol";
 
-contract RewardFacet is ReentrancyGuard {
-    AppStorage internal s;
-
+contract RewardFacet is Modifiers {
     event RewardCreated(
         uint256 rewardId,
         address owner,

@@ -43,6 +43,7 @@ contract MasterFacet {
         uint256 _currency,
         uint256 _rewardId
     ) public isDeadlinePassed(_id) {
+        /*
         /// @param _amountM - amount of tokens to be sent to microfund
         /// @param _amountD - amount of tokens to be direcly donated
         /// @notice User can create microfund and donate at the same time
@@ -102,6 +103,7 @@ contract MasterFacet {
         }
         s.funds[_id].balance += _amountD;
         rewardCharge(_rewardId);
+        */
     }
 
     /// @notice Charge rewards during contribution process

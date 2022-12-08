@@ -1,18 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 
 import {LibDiamond} from "../libraries/LibDiamond.sol";
-import "../AppStorage.sol";
+import {Modifiers, IERC20, Fund} from "../AppStorage.sol";
 import "../Errors.sol";
 
 import "hardhat/console.sol";
 
-contract FundFacet is ReentrancyGuard {
-    AppStorage internal s;
-
+contract FundFacet is Modifiers {
     event FundCreated(uint256 id);
     event MicroDrained(address owner, uint256 amount, uint256 fundId);
     event MicroClosed(address owner, uint256 cap, uint256 fundId);
@@ -27,11 +24,12 @@ contract FundFacet is ReentrancyGuard {
         uint256 _deadline = block.timestamp + 30 days;
         /// if (msg.sender == address(0)) revert InvalidAddress(msg.sender);
         if (_level1 < 0) revert InvalidAmount(_level1);
+        uint256 _id = s.funds.length;
         s.funds.push(
             Fund({
                 owner: msg.sender,
                 balance: 0,
-                id: s.funds.length,
+                id: _id,
                 state: 1,
                 deadline: _deadline,
                 level1: _level1,
@@ -41,7 +39,7 @@ contract FundFacet is ReentrancyGuard {
                 backerNumber: 0
             })
         );
-        emit FundCreated(s.funds.length);
+        emit FundCreated(_id);
     }
 
     ///@notice - Checks balances for each supported currency and returns funds back to the users

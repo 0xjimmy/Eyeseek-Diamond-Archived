@@ -3,7 +3,11 @@
 import { ethers } from "hardhat";
 import { getSelectors, FacetCutAction } from "./libraries/diamond";
 
-async function deployDiamond(facetNames: string[] = []) {
+async function deployDiamond(
+  facetNames: string[] = [],
+  usdcAddress: string = ethers.constants.AddressZero,
+  usdtAddress: string = ethers.constants.AddressZero
+) {
   const accounts = await ethers.getSigners();
   const contractOwner = accounts[0];
 
@@ -55,8 +59,8 @@ async function deployDiamond(facetNames: string[] = []) {
   const diamond = await Diamond.deploy(
     facetCuts,
     diamondArgs,
-    ethers.constants.AddressZero,
-    ethers.constants.AddressZero
+    usdcAddress,
+    usdtAddress
   );
   await diamond.deployed();
   console.log();

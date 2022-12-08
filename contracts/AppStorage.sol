@@ -62,6 +62,7 @@ struct Reward {
 }
 
 struct AppStorage {
+    uint256 _reentracyStatus;
     IERC20 usdc;
     IERC20 usdt;
     address[] tokens;
@@ -81,5 +82,18 @@ library LibAppStorage {
 
     function abs(int256 x) internal pure returns (uint256) {
         return uint256(x >= 0 ? x : -x);
+    }
+}
+
+contract Modifiers {
+    AppStorage internal s;
+
+    modifier nonReentrant() {
+        require(s._reentracyStatus != 2, "ReentrancyGuard: reentrant call");
+        s._reentracyStatus = 2;
+
+        _;
+
+        s._reentracyStatus = 1;
     }
 }
