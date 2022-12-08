@@ -1,7 +1,19 @@
-const { ethers, network } = require("hardhat");
-const { expect } = require("chai");
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import { expect } from "chai";
+import { BigNumber } from "ethers";
+import { ethers } from "hardhat";
+import { EyeseekMulti, Funding, Token } from "../typechain-types";
 
-let user, donationToken, donation, fund, cancelUser, receiver;
+let user: SignerWithAddress,
+  donationToken: Token,
+  donation: Funding,
+  fund: SignerWithAddress,
+  cancelUser: SignerWithAddress,
+  receiver: SignerWithAddress,
+  usdtToken: Token,
+  usdcToken: Token,
+  multiToken: EyeseekMulti,
+  stakeAmount: BigNumber;
 
 // Run tests with tracer
 // npx hardhat test --trace      # shows logs + calls
@@ -11,10 +23,10 @@ let user, donationToken, donation, fund, cancelUser, receiver;
 beforeEach(async function () {
   // environment preparation, deploy token & staking contracts
   const accounts = await ethers.getSigners();
-  user = await accounts[3]; // Donor account
-  fund = await accounts[4]; // Fund account
-  cancelUser = await accounts[5]; // Cancel account
-  receiver = await accounts[6]; // Receiver account
+  user = accounts[3]; // Donor account
+  fund = accounts[4]; // Fund account
+  cancelUser = accounts[5]; // Cancel account
+  receiver = accounts[6]; // Receiver account
 
   const Token = await ethers.getContractFactory("Token");
   donationToken = await Token.deploy();
